@@ -1,7 +1,6 @@
-'use client'
+'use client';
 
 import React, { useState, useEffect } from 'react';
-import { User } from 'firebase/auth';
 import { collection, query, orderBy, getDocs, Timestamp } from 'firebase/firestore';
 import { db } from './firebase';
 
@@ -14,11 +13,7 @@ interface Post {
   userId: string;
 }
 
-interface PostFeedProps {
-  user: User;
-}
-
-export default function PostFeed({ user }: PostFeedProps) {
+export default function PostFeed() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,14 +26,14 @@ export default function PostFeed({ user }: PostFeedProps) {
       try {
         const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'));
         const querySnapshot = await getDocs(q);
-        const fetchedPosts = querySnapshot.docs.map(doc => ({ 
-          id: doc.id, 
-          ...doc.data() 
-        } as Post));
+        const fetchedPosts = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Post[];
         setPosts(fetchedPosts);
       } catch (err) {
-        console.error("Error fetching posts: ", err);
-        setError("Failed to load posts. Please try again later.");
+        console.error('Error fetching posts: ', err);
+        setError('Failed to load posts. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -71,10 +66,13 @@ export default function PostFeed({ user }: PostFeedProps) {
     <div className="relative">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {posts.map((post) => (
-          <div key={post.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
-            <img 
-              src={post.mediumImageUrl} 
-              alt="Post" 
+          <div
+            key={post.id}
+            className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105"
+          >
+            <img
+              src={post.mediumImageUrl}
+              alt="Post"
               className="w-full h-48 object-cover cursor-pointer"
               onClick={() => handleImageClick(post.mediumImageUrl)} // Opens the image in larger view
             />
@@ -90,20 +88,18 @@ export default function PostFeed({ user }: PostFeedProps) {
 
       {/* Enlarged Image Modal */}
       {selectedImage && (
-        <div 
+        <div
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50"
           onClick={handleCloseImage} // Close modal when clicking anywhere on the modal background
         >
-          <img 
-            src={selectedImage} 
-            alt="Enlarged" 
-            className="max-w-full max-h-full p-4 cursor-pointer" 
-            onClick={e => e.stopPropagation()} // Prevent click on image from closing modal
+          <img
+            src={selectedImage}
+            alt="Enlarged"
+            className="max-w-full max-h-full p-4 cursor-pointer"
+            onClick={(e) => e.stopPropagation()} // Prevent click on image from closing modal
           />
         </div>
       )}
-
-    
     </div>
   );
 }
