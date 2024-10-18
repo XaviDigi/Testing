@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, orderBy, getDocs, Timestamp } from 'firebase/firestore';
 import { db } from './firebase';
+import Image from 'next/image'; // Import next/image for optimized image handling
 
 interface Post {
   id: string;
@@ -70,9 +71,12 @@ export default function PostFeed() {
             key={post.id}
             className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105"
           >
-            <img
+            {/* Using next/image for optimized images */}
+            <Image
               src={post.mediumImageUrl}
               alt="Post"
+              width={500}
+              height={300}
               className="w-full h-48 object-cover cursor-pointer"
               onClick={() => handleImageClick(post.mediumImageUrl)} // Opens the image in larger view
             />
@@ -92,9 +96,12 @@ export default function PostFeed() {
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50"
           onClick={handleCloseImage} // Close modal when clicking anywhere on the modal background
         >
-          <img
+          {/* Using next/image for the enlarged modal as well */}
+          <Image
             src={selectedImage}
             alt="Enlarged"
+            width={1000}
+            height={600}
             className="max-w-full max-h-full p-4 cursor-pointer"
             onClick={(e) => e.stopPropagation()} // Prevent click on image from closing modal
           />
