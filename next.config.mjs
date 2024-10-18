@@ -1,4 +1,11 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    domains: [
+      'firebasestorage.googleapis.com', // Allow Firebase Storage images
+      'testing-five-kohl.vercel.app',    // Allow your Vercel domain
+    ],
+  },
+}
 
-export default nextConfig;
+module.exports = nextConfig;
