@@ -1,0 +1,8 @@
+[
+    {
+      "origin": ["https://testing-five-kohl.vercel.app/"],
+      "method": ["GET"],
+      "maxAgeSeconds": 3600
+    }
+  ]
+  
